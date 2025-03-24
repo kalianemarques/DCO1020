@@ -3,12 +3,11 @@ import sys
 import json
 
 # Receber parâmetros da linha de comando
-if len(sys.argv) < 3:
-    print("Uso: python Entrega2.py <frequência> <raio>")
+if len(sys.argv) < 2:
+    print("Uso: python Entrega2.py <frequência>")
     sys.exit(1)
 
 dFc = float(sys.argv[1])  # Frequência da portadora (MHz)
-dR = float(sys.argv[2])  # Raio do hexágono (m)
 
 # Parâmetros fixos
 dSensitivity = -104  # Sensibilidade do receptor
@@ -72,11 +71,32 @@ def calculate_outage(dR, dFc):
 
     return dOutRate
 
-# Calcular a taxa de outage e retornar como JSON
+# Função para encontrar o maior raio com Outage <= 10%
+def find_max_radius(dFc, target_outage=10, tolerance=0.1):
+    dR_min = 100  # Raio mínimo inicial (m)
+    dR_max = 50000  # Raio máximo inicial (m)
+    dR = (dR_min + dR_max) / 2  # Raio inicial (m)
+
+    while dR_max - dR_min > tolerance:
+        outage = calculate_outage(dR, dFc)
+        if outage > target_outage:
+            dR_max = dR  # Reduz o raio máximo
+        else:
+            dR_min = dR  # Aumenta o raio mínimo
+        dR = (dR_min + dR_max) / 2  # Atualiza o raio
+
+    return dR
+
+# Determinar o maior raio com Outage <= 10%
+dR = find_max_radius(dFc)
+
+# Calcular a taxa de Outage para o raio encontrado
 dOutRate = calculate_outage(dR, dFc)
+
+# Retornar o resultado como JSON
 result = {
     "frequência": dFc,
-    "raio": dR,
+    "raio_aproximado": dR,
     "taxa_de_outage": dOutRate
 }
 print(json.dumps(result))
