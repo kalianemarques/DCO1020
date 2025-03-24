@@ -7,7 +7,74 @@
     <title>Hands-on 01</title>
 </head>
 <body>
-    <p>Página em construção...</p>
+    <header>
+        <div class="logo">Cálculos de Redes</div>
+        <nav>
+           <ul>
+              <li><a id="power" class="pt">Potência Recebida</a></li>
+              <li><a id="outage" class="pt">Outage</a></li>
+              <li><a id="radius" class="pt">Raio Calculado</a></li>
+           </ul>
+        </nav>
+    </header>
+     
+    <main>
+        <!-- -adicionar depois um texto falando sobre cada seção? -->
+
+        <!-- Seção Potência Recebida -->
+        <section id="powerSection" style="display: flex;">
+            <h2>Cálculo de Potência Recebida</h2>
+            <form>
+                <input id="frp" type="number" placeholder="Potência transmitida">
+                <input id="rrp" type="number" placeholder="Distância">
+                <button id="calculateReceivedPower">Calcular</button>
+            </form>
+            <div id="resultPower" class="result hiddenResult">
+                <h3>Resultado</h3>
+                
+            </div>
+        </section>
+        
+        <!-- Seção Outage -->
+        <section id="outageSection" style="display: none;">
+            <h2>Cálculo de Outage</h2>
+            <form>
+                <input id="fco" type="number" placeholder="Frequencia das Antenas">
+                <input id="rco" type="number" placeholder="Raio das Antenas">
+                <button id="calculateOutage">Calcular Outage</button>
+            </form>
+            <div id="resultOutage" class="result hiddenResult">
+                <h3>Resultado</h3>
+                <p><span class="b">Taxa de Outage: </span><span id="taxa_de_outage_calculada"></span>km</p>
+                
+            </div>
+        </section>
+        
+        <!-- Seção Raio Calculado -->
+        <section id="radiusSection" style="display: none;">
+            <h2>Raio Calculado para Outage Planejada</h2>
+            <form>
+                <input id="fcr" type="number" placeholder="Frequência das Antenas">
+                <select name="model" id="model">
+                    <option value="" disabled selected>Modelo</option>
+                    <option value="ok">Okumura-Hata</option>
+                    <option value="cost">COST 231</option>
+                </select>
+                <button id="calculateRadius">Calcular Raio</button>
+            </form>
+            <div id="resultCalculateRadius" class="result hiddenResult">
+                <h3>Reseultado</h3>
+                <div>
+                    <p><span class="b">Raio Calculado: </span><span id="raio_aproximado"></span>km</p>
+                    <p><span class="b">Taxa de Outage: </span><span id="taxa_de_outage"></span>%</p>
+                </div>
+            </div>
+        </section>
+    </main>
+        
+    <footer>
+        <p>&copy; 2025 Cálculos de Redes. Todos os direitos reservados.</p>
+    </footer>
 </body>
-<script src="index.js"></script>
+<script type="module" src="index.js"></script>
 </html>
