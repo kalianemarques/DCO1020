@@ -40,8 +40,8 @@ Siga os passos abaixo para configurar e iniciar a aplicação:
 
 Se você tiver o Git instalado, clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/kalianemarques/DCO1020.git
+cd DCO1020
 ```
 
 ---
