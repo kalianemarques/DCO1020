@@ -119,15 +119,15 @@ async function plotGraphsFromJSON(graphData) {
             .append("circle")
             .attr("cx", d => xScale(d.x))
             .attr("cy", d => yScale(d.y))
-            .attr("r", 3)
+            .attr("r", 9) // Aumentar o raio dos pontos para preencher o gráfico
             .attr("fill", d => colorScale(d.power))
-            .attr("opacity", 0.7)
+            .attr("opacity", 0.9) // Ajustar a opacidade para melhor visualização
             .attr("class", "power-point")
             .on("mouseover", function(event, d) {
-                d3.select(this).attr("r", 5);
+                d3.select(this).attr("r", 11); // Aumentar o tamanho no hover
                 tooltip.transition()
                     .duration(200)
-                    .style("opacity", .9);
+                    .style("opacity", .7);
                 tooltip.html(`Potência: ${d.power.toFixed(2)} dBm<br>
                             X: ${d.x.toExponential(2)} m<br>
                             Y: ${d.y.toExponential(2)} m`)
@@ -135,10 +135,10 @@ async function plotGraphsFromJSON(graphData) {
                     .style("top", (event.pageY - 30) + "px");
             })
             .on("mouseout", function() {
-                d3.select(this).attr("r", 3);
+                d3.select(this).attr("r", 9); // Retornar ao tamanho original
                 tooltip.transition()
                     .duration(500)
-                    .style("opacity", 0);
+                    .style("opacity", 1);
             });
 
         // Adicionar rótulo para identificar a ERB principal
@@ -161,39 +161,40 @@ async function plotGraphsFromJSON(graphData) {
         }
     });
 
-    // Configuração dos eixos com notação científica
-    const formatScientific = d3.format(".1e");
+    // Configuração dos eixos com notação científica simplificada
+    const scaleFactor = 1e4; // Fator de escala (10^4)
     const xAxis = d3.axisBottom(xScale)
-        .tickFormat(d => {
-            const formatted = formatScientific(d);
-            return formatted.replace(/e\+?(-?\d+)/, '×10<sup>$1</sup>');
-        });
+        .tickFormat(d => (d / scaleFactor).toFixed(1)); // Dividir os valores pelo fator de escala
 
     const yAxis = d3.axisLeft(yScale)
-        .tickFormat(d => {
-            const formatted = formatScientific(d);
-            return formatted.replace(/e\+?(-?\d+)/, '×10<sup>$1</sup>');
-        });
-
+        .tickFormat(d => (d / scaleFactor).toFixed(1)); // Dividir os valores pelo fator de escala
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", `translate(0,${height})`)
+        .attr("transform", `translate(0,${height + 10})`)
         .call(xAxis)
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-65)");
+        .append("text") // Adicionar a notação no final do eixo
+        .attr("x", width)
+        .attr("y", 40)
+        .attr("text-anchor", "end")
+        .attr("font-size", "12px")
+        .text("(10^4)");
 
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis);
+        .call(yAxis)
+        .append("text") // Adicionar a notação no final do eixo
+        .attr("x", -60)
+        .attr("y", -10)
+        .attr("text-anchor", "end")
+        .attr("font-size", "12px")
+        .attr("transform", "rotate(-90)")
+        .text("(10^4)");
 
     // Adicionar título do eixo X
     svg.append("text")
-        .attr("transform", `translate(${width/2}, ${height + margin.top})`)
+        .attr("transform", `translate(${width/2}, ${height + margin.top +10})`)
         .style("text-anchor", "middle")
-        .text("Posição X (m)");
+        .text("Posição X (10^4m)");
 
     // Adicionar título do eixo Y
     svg.append("text")
@@ -202,11 +203,11 @@ async function plotGraphsFromJSON(graphData) {
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Posição Y (m)");
+        .text("Posição Y (10^4m)");
 
     // Adicionar controles de visualização
     addERBToggleButtons(graphData);
-    addColorLegend(svg, colorScale, width, minPower, maxPower);
+    addColorLegend(svg, colorScale, width, height, minPower, maxPower);
 }
 
 function addERBToggleButtons(graphData) {
@@ -233,15 +234,16 @@ function addERBToggleButtons(graphData) {
     });
 }
 
-function addColorLegend(svg, colorScale, width, minPower, maxPower) {
-    const legendWidth = 100, legendHeight = 20;
+function addColorLegend(svg, colorScale, width, height, minPower, maxPower) {
+    const legendWidth = 40; // Largura da legenda
+    const legendHeight = height; // Altura da legenda igual à altura do gráfico
     const legend = svg.append("g")
         .attr("class", "legend")
-        .attr("transform", `translate(${width - legendWidth - 20}, 40)`);
-    
+        .attr("transform", `translate(${width + 40}, 0)`); // Posicionar na lateral direita
+
     // Título da legenda
     legend.append("text")
-        .attr("x", legendWidth/2)
+        .attr("x", legendWidth / 2)
         .attr("y", -10)
         .text("Potência (dBm)")
         .attr("text-anchor", "middle")
@@ -251,34 +253,34 @@ function addColorLegend(svg, colorScale, width, minPower, maxPower) {
     const gradient = legend.append("defs")
         .append("linearGradient")
         .attr("id", "gradient")
-        .attr("x1", "0%").attr("y1", "0%")
-        .attr("x2", "100%").attr("y2", "0%");
-    
+        .attr("x1", "0%").attr("y1", "100%") // Gradiente na vertical
+        .attr("x2", "0%").attr("y2", "0%");
+
     // Adicionar stops ao gradiente
     const stops = [0, 0.2, 0.4, 0.6, 0.8, 1];
     stops.forEach((stop, i) => {
         gradient.append("stop")
-            .attr("offset", `${stop*100}%`)
+            .attr("offset", `${stop * 100}%`)
             .attr("stop-color", colorScale(minPower + (maxPower - minPower) * stop));
     });
-    
+
     // Retângulo com o gradiente
     legend.append("rect")
         .attr("width", legendWidth)
         .attr("height", legendHeight)
         .style("fill", "url(#gradient)");
-    
+
     // Eixo da legenda
     const legendScale = d3.scaleLinear()
         .domain([minPower, maxPower])
-        .range([0, legendWidth]);
-    
-    const legendAxis = d3.axisBottom(legendScale)
+        .range([legendHeight, 0]); // Escala invertida para alinhar com o gradiente
+
+    const legendAxis = d3.axisRight(legendScale) // Eixo na lateral direita
         .ticks(5)
         .tickFormat(d => d.toFixed(0));
-    
+
     legend.append("g")
-        .attr("transform", `translate(0,${legendHeight})`)
+        .attr("transform", `translate(${legendWidth}, 0)`) // Posicionar o eixo ao lado do gradiente
         .call(legendAxis)
         .selectAll("text")
         .attr("font-size", "10px");

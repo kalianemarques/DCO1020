@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'http://localhost:3000/api';
 
 /**
  * Faz uma requisição ao servidor para calcular o raio celular usando o modelo Okumura-Hata.
