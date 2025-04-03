@@ -35,7 +35,7 @@ router.post('/calculo_potencia', (req, res) => {
     if (!frequency || !radius) {
         return res.status(400).json({ error: 'Parâmetros "frequency" e "radius" são obrigatórios.' });
     }
-    executePython('handson1_p3_1.py', [frequency, radius], res, true); // Define isFileResponse como true
+    executePython('handson1_p3_1.py', [frequency, radius], res);
 });
 
 module.exports = router;
