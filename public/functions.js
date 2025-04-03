@@ -1,3 +1,5 @@
+const API_URL = 'http://localhost:3001/api';
+
 /**
  * Faz uma requisição ao servidor para calcular o raio celular usando o modelo Okumura-Hata.
  * @param {number} frequency - A frequência da portadora (em MHz).
@@ -5,7 +7,7 @@
  */
 export async function definition_radius_okumura_hata(frequency) {
     try {
-        const response = await fetch('http://localhost:3000/api/definicao_raio_okumura_hata', {
+        const response = await fetch(`${API_URL}/definicao_raio_okumura_hata`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +35,7 @@ export async function definition_radius_okumura_hata(frequency) {
  */
 export async function definition_radius_cost_hata(frequency) {
     try {
-        const response = await fetch('http://localhost:3000/api/definicao_raio_cost_hata', {
+        const response = await fetch(`${API_URL}/definicao_raio_cost_hata`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,7 +64,7 @@ export async function definition_radius_cost_hata(frequency) {
  */
 export async function calculate_outage(frequency, radius) {
     try {
-        const response = await fetch('http://localhost:3000/api/calculo_outage', {
+        const response = await fetch(`${API_URL}/calculo_outage`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -91,7 +93,7 @@ export async function calculate_outage(frequency, radius) {
  */
 export async function power_calculation(frequency, radius) {
     try {
-        const response = await fetch('http://localhost:3000/api/calculo_potencia', {
+        const response = await fetch(`${API_URL}/calculo_potencia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

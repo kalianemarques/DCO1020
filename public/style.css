@@ -10,8 +10,10 @@ body {
     line-height: 1.6;
     background-color: #fefefe;
     color: #333;
-    padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column; /* Organiza os elementos na vertical */
+    min-height: 100vh; /* Garante que o body ocupe toda a altura da tela */
 }
 
 /* Cabeçalho */
@@ -53,7 +55,7 @@ header nav ul li a {
 
 /* Seções principais */
 main {
-    width: 100%;
+    flex: 1; /* Faz o main crescer para ocupar o espaço disponível */
 }
 
 section {
@@ -130,6 +132,68 @@ footer {
     color: #fefefe;
     text-align: center;
     padding: 10px 0;
-    margin-top: 20px;
     font-size: 0.9rem;
+}
+
+.erb-toggle {
+    margin-bottom: 20px;
+}
+
+.erb-toggle button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.hexagon {
+    stroke-width: 2px;
+}
+.power-point {
+    stroke: none;
+    transition: fill 0.3s ease;
+}
+.tooltip {
+    pointer-events: none;
+    font-size: 12px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+#graph-container {
+    margin-top: 20px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.hexagon {
+    stroke-linejoin: round;
+}
+
+.power-point {
+    stroke: none;
+    transition: r 0.2s ease;
+}
+
+.power-point:hover {
+    stroke: white;
+    stroke-width: 1px;
+    opacity: 1 !important;
+}
+
+.axis text {
+    font-size: 12px;
+}
+
+.axis sup {
+    font-size: 0.7em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+.erb-toggle button:hover {
+    opacity: 0.9;
+}
+
+.erb-toggle button.active {
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
 }
