@@ -76,7 +76,7 @@ cd DCO1020
 1. Abra o terminal ou prompt de comando.
 2. Instale as bibliotecas necessárias com o seguinte comando:
    ```bash
-   pip install numpy matplotlib
+   pip install --user numpy matplotlib
    ```
 3. Verifique se as bibliotecas foram instaladas corretamente:
    ```bash
